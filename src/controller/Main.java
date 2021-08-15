@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package controller;
+
 import javafx.application.Application;
 
 import java.io.File;
@@ -16,20 +17,13 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
-import model.Polygon;
-import model.Punkten;
+import model.*;
 import utilities.Einleser;
 
 import javax.swing.JFrame;
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.lang.reflect.Method;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 
 import view.Ausgabe;
 
@@ -37,33 +31,8 @@ import view.Ausgabe;
  *
  * @author alh
  */
-public class Main extends Application
+public class Main
 {
-       @Override
-    public void start(Stage primaryStage)
-    {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>()
-        {
-            
-            @Override
-            public void handle(ActionEvent event)
-            {
-                System.out.println("Hello World!");
-            }
-        });
-        
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
-        
-        Scene scene = new Scene(root, 300, 250);
-        
-        primaryStage.setTitle("Hello World!");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
- 
 
     /**
      * Mit Hilfe von java.io.File und JFileChooser kann eine professionale Suche
@@ -98,26 +67,15 @@ public class Main extends Application
      */
     public static void main(String[] args)
     {
-        launch(args);
+
         callParsar();
-       
+        VolumenUndFlaecheRechner.berechnen();
+
     }
 
-    public static void anzeigen()
-    {
-        Anzeige anzeige = new Anzeige();
-        anzeige.frame.setTitle(anzeige.titel);
-        anzeige.frame.add(anzeige);
-        anzeige.frame.pack();
-        anzeige.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        anzeige.frame.setLocationRelativeTo(null);
-        anzeige.frame.setResizable(false);
-        anzeige.frame.setVisible(true);
-        anzeige.start();
-    }
     private static void callParsar()
-{
-    File myFile = sucheFile();
+    {
+        File myFile = sucheFile();
         if (myFile == null)
         {
             // anstatt einfach durch system.out.println() eine Nachricht anzuzeigen, benutzt wird hier Logger
@@ -132,20 +90,19 @@ public class Main extends Application
             try
             {
                 List<Polygon> listPoly = Einleser.parseSTLFile(myFile.toPath());
+                VolumenUndFlaecheRechner.setPolyeder(listPoly);
                 listPoly.forEach((Polygon t) ->
                 {
                     System.out.println(t);
                 });
-                
+
             } catch (IOException ausnahme)
             {
                 Logger.getLogger(Einleser.class.getName()).log(Level.SEVERE, null, ausnahme);
                 System.exit(ausnahme.hashCode());
             }
-            Ausgabe.oberfleacheAusgeben();
-            anzeigen();
-            
-           // System.exit(0);
+
+            // System.exit(0);
         } else
         {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.WARNING, "Sie haben keinen File ausgewählt!");
@@ -153,8 +110,6 @@ public class Main extends Application
 
         }
 
-}
+    }
 
 }
-
-

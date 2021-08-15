@@ -4,15 +4,17 @@
  * and open the template in the editor.
  */
 package view;
+
 import java.util.ArrayList;
 import utilities.Einleser;
 import model.*;
+
 public class Ausgabe
 {
-    public static void oberfleacheAusgeben()
+
+    public static void print(String text)
     {
-        System.out.println("Oberfläche: " + Polygon.get_fleache());
-        System.out.println("Volumen: " + Polygon.get_volumen());
+        System.out.println(text);
     }
-  
+
 }
